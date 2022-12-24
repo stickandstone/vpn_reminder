@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.10
+FROM python:3.11-slim-bullseye
 
 # set work directory
 WORKDIR /usr/src/app
@@ -8,12 +8,13 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# Set the environment variables to the values in the .env file
 # install dependencies
-RUN pip install --upgrade pip
-RUN pip install wheel
+ADD requirements.txt .
 
-COPY requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+
 
 ## copy project
 COPY . .

@@ -12,12 +12,7 @@ analytics/local_settings.py
 import.csv
 import_planets.csv
 .coverage
-.env.dev
-.env.dev.bkp
-.env.prod
-.env.local
-.env.prod.db
-.env.prod.proxy-companion
+.env
 .sourcery.yaml
 
 # Byte-compiled / optimized / DLL files
