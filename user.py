@@ -1,6 +1,20 @@
 import requests
 
-from settings import FORBIDDEN_COUNTRIES, GEOIP_API_URL, IGNORE_MOBILE_CLIENTS, logger
+from settings import (
+    FORBIDDEN_COUNTRIES,
+    GEOIP_API_URL,
+    SKIP_MOBILE_CLIENTS_CHECK,
+    logger,
+)
+
+
+def get_geo_by_ip(ip_address: str) -> dict | None:
+    try:
+        response = requests.get(f"{GEOIP_API_URL}{ip_address}")
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error while getting geo by IP. Error: {e}")
+        return None
+    return response.json()
 
 
 class User:
@@ -9,30 +23,22 @@ class User:
         self.username = login["username"]
         self.agent = login["user_agent"]
         self.ip = login["ip"]
-        self.geo = self.get_geo_by_ip()
-        self.country = self.geo["country"]
-        self.countryCode = self.geo["countryCode"]
-        self.is_need_to_remind = self.is_need_to_remind(users_to_remind)
+        self.geo = get_geo_by_ip(self.ip)
+        self.country = self.geo.get("country", "Unknown")
+        self.countryCode = self.geo.get("countryCode", "Unknown")
+        self.needs_reminder = self.is_need_to_remind(users_to_remind)
 
     def _is_mobile_client(self) -> bool:
-        if IGNORE_MOBILE_CLIENTS:
+        if SKIP_MOBILE_CLIENTS_CHECK:
             return False
         return "iPhone" in self.agent or "Android" in self.agent
 
-    def is_need_to_remind(self, users_to_remind) -> bool:
+    def is_need_to_remind(self, users_to_remind: list) -> bool:
         return (
             self.countryCode in FORBIDDEN_COUNTRIES
             and self.id not in users_to_remind
             and not self._is_mobile_client()
         )
-
-    def get_geo_by_ip(self) -> dict | None:
-        try:
-            response = requests.get(f"{GEOIP_API_URL}{self.ip}")
-        except TimeoutError:
-            logger.error("Timeout error while getting geo by ip")
-            return None
-        return response.json()
 
     def __str__(self):
         return f"User {self.username} with {self.id} is from forbidden country {self.country}"

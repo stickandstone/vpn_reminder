@@ -14,9 +14,7 @@ from settings import (
 
 
 class SlackClient:
-    def __init__(
-        self,
-    ):
+    def __init__(self):
         self.chat_client = WebClient(token=SLACK_TOKEN_CHAT)
         self.workspace_client = WebClient(token=SLACK_TOKEN)
 
@@ -24,8 +22,8 @@ class SlackClient:
         if ADD_JOKE_TO_MESSAGE:
             try:
                 response = requests.get("https://jokesrv.rubedo.cloud/facts")
-            except TimeoutError:
-                logger.error("Timeout error while getting a joke/fact")
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Error while getting joke. Error: {e}")
                 return ""
             return response.json()["content"]
         return ""
