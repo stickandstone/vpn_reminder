@@ -31,7 +31,7 @@ IGNORE_MOBILE_CLIENTS = True
 # Boolean indicating whether the service should only run during specific days and hours
 CHECK_WORKING_DAYS_AND_HOURS = True
 
-# Tuple containing the start and end hours for the working day
+# List integers representing the start and end hours for the working day
 WORKING_HOURS = [8, 20]
 
 # List of integers representing the days of the week that are considered weekends
