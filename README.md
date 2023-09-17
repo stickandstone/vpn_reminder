@@ -5,21 +5,27 @@ The `vpn_reminder` tool is designed to check whether a Slack user has their VPN 
 ## **Pre-requisites:**
 
 1. Ensure you have the `.env` file prepared with the following variables:
-    - `SLACK_TOKEN` - Your Slack API workspace client token 
-    - `SLACK_CHANNEL` - The Slack chat client token
+    - `SLACK_TOKEN=<token>` - Your Slack API workspace client token 
+    - `SLACK_CHANNEL=<token>` - The Slack chat client token
 
-
-2. It's essential to have both [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed on your machine.
+2. It's essential to have [Docker](https://docs.docker.com/get-docker/) installed on your machine.
 
 ## **Running the Service:**
 
 1. First, clone the repository:
 ```bash
-git clone <your_repository_link> && cd <repository_name>
+git clone https://github.com/stickandstone/vpn_reminder.git && cd vpn_reminder
 ```
-2. Then, build the Docker image:
+2. Next, create the `.env` inside in the repo folder file with the variables mentioned above.
+
+3. Then, build the Docker image:
 ```bash
-docker-compose up --build
+docker build -t vpn_reminder . 
+```
+4.Finally, run the Docker container:
+```bash
+docker run -d --env-file .env --name vpn_reminder vpn_reminder
 ```
 
-he service should now be active and monitoring as expected. If there are any issues, please review your configuration and setup.
+The service should now be active and monitoring as expected. If there are any issues, please review your configuration and setup.
+And don't hesitate to contact me if you have any questions.
