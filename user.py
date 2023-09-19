@@ -30,14 +30,14 @@ class User:
 
     def _is_not_mobile_client(self) -> bool:
         if SKIP_MOBILE_CLIENTS_CHECK:
-            return False
-        return "iPhone" in self.agent or "Android" in self.agent
+            return True
+        return "iPhone" not in self.agent or "Android" not in self.agent
 
     def is_need_to_remind(self, users_to_remind: list) -> bool:
         return (
             self.countryCode in FORBIDDEN_COUNTRIES
             and self.id not in users_to_remind
-            and not self._is_not_mobile_client()
+            and self._is_not_mobile_client()
         )
 
     def __str__(self):
