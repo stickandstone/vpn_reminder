@@ -2,14 +2,16 @@ import time
 
 import requests
 from slack import WebClient
+from slack.errors import SlackApiError
 
 from settings import (
     SLACK_TOKEN,
     SLACK_TOKEN_CHAT,
+    LOGINS_COUNT,
     WARNING_MESSAGE,
     CHECKING_LOGIN_PERIOD,
     ADD_JOKE_TO_MESSAGE,
-    logger,
+    logger, DEBUG,
 )
 
 
@@ -18,7 +20,8 @@ class SlackClient:
         self.chat_client = WebClient(token=SLACK_TOKEN_CHAT)
         self.workspace_client = WebClient(token=SLACK_TOKEN)
 
-    def generate_message(self) -> str:
+    @staticmethod
+    def generate_message() -> str:
         if ADD_JOKE_TO_MESSAGE:
             try:
                 response = requests.get("https://jokesrv.rubedo.cloud/facts")
@@ -30,8 +33,13 @@ class SlackClient:
 
     def send_private_message(self, user_id: str) -> None:
         text = self.generate_message() + WARNING_MESSAGE
-        logger.info(f"{text=}")
-        self.chat_client.chat_postMessage(channel=user_id, text=text)
+        if DEBUG:
+            logger.info(f"Sending message to {user_id}: {text}")
+            return
+        try:
+            self.chat_client.chat_postMessage(channel=user_id, text=text)
+        except SlackApiError as e:
+            logger.error(f"Error while sending message to {user_id}. Error: {e}")
 
     def send_reminders(self, remind_list: list) -> None:
         logger.info("Sending reminding...")
@@ -47,5 +55,5 @@ class SlackClient:
         ]
 
     def get_logins(self) -> list:
-        logins = self.workspace_client.team_accessLogs(count=100)
+        logins = self.workspace_client.team_accessLogs(count=LOGINS_COUNT)
         return self.filter_recent_logins(logins["logins"])

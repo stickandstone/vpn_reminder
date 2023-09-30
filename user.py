@@ -28,7 +28,8 @@ class User:
         self.countryCode = self.geo.get("countryCode", "Unknown")
         self.needs_reminder = self.is_need_to_remind(users_to_remind)
 
-    def _is_not_mobile_client(self) -> bool:
+    @property
+    def is_not_mobile_client(self) -> bool:
         if SKIP_MOBILE_CLIENTS_CHECK:
             return True
         return "iPhone" not in self.agent or "Android" not in self.agent
@@ -37,7 +38,7 @@ class User:
         return (
             self.countryCode in FORBIDDEN_COUNTRIES
             and self.id not in users_to_remind
-            and self._is_not_mobile_client()
+            and self.is_not_mobile_client
         )
 
     def __str__(self):

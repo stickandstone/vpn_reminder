@@ -11,8 +11,16 @@ def get_env_var(key: str) -> str:
 
 # Slack API token used for sending messages to specific users or channels
 SLACK_TOKEN_CHAT = get_env_var("SLACK_TOKEN_CHAT")
+
 # Slack API token used for interacting with the Slack API
 SLACK_TOKEN = get_env_var("SLACK_TOKEN")
+
+# Flag to enable debug mode, which determines whether to send alert messages to
+# members of your Slack group during testing.
+DEBUG = get_env_var("DEBUG")
+
+# Number of recent logins to check. Increase this if you have many active users; consider 2-3x daily active users.
+LOGINS_COUNT = 100
 
 # A list of country codes that are disallowed from using the service
 FORBIDDEN_COUNTRIES = ["RU"]
