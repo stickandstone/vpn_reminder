@@ -17,7 +17,7 @@ SLACK_TOKEN = get_env_var("SLACK_TOKEN")
 
 # Flag to enable debug mode, which determines whether to send alert messages to
 # members of your Slack group during testing.
-DEBUG = get_env_var("DEBUG")
+DEBUG = False
 
 # Number of recent logins to check. Increase this if you have many active users; consider 2-3x daily active users.
 LOGINS_COUNT = 100
