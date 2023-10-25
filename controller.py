@@ -34,7 +34,7 @@ class Controller:
             hour=WORKING_HOURS[0],
             tzinfo=pytz.timezone(TIME_ZONE),
         )
-        sleep_seconds = (next_start_time - now).total_secxqonds()
+        sleep_seconds = (next_start_time - now).total_seconds()
         time.sleep(sleep_seconds)
 
     def identify_users_to_remind(self) -> list:
