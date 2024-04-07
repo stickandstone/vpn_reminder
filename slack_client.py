@@ -11,6 +11,7 @@ from settings import (
     WARNING_MESSAGE,
     CHECKING_LOGIN_PERIOD,
     ADD_JOKE_TO_MESSAGE,
+    JOKE_API_URL,
     logger, DEBUG,
 )
 
@@ -24,7 +25,7 @@ class SlackClient:
     def generate_message() -> str:
         if ADD_JOKE_TO_MESSAGE:
             try:
-                response = requests.get("https://jokesrv.rubedo.cloud/facts")
+                response = requests.get(JOKE_API_URL)
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error while getting joke. Error: {e}")
                 return ""

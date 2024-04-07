@@ -49,6 +49,9 @@ WORKING_HOURS = [8, 20]
 # List of integers for days of the week considered as weekends, starting from 0 (Monday)
 WEEKEND = [5, 6]
 
+
+JOKE_API_URL = os.getenv("JOKE_API_URL", "https://jokesrv.rubedo.cloud/facts")
+
 # Flag to add a joke to the warning message
 ADD_JOKE_TO_MESSAGE = True
 
